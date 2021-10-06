@@ -2,9 +2,9 @@ name := "cs-a1-g20"
 
 version := "0.1"
 
-scalaVersion := "2.13.6"
+//scalaVersion := "2.13.6"
 
-//scalaVersion := "2.12.8"
+scalaVersion := "2.12.8"
 
 scalacOptions := Seq("-Xsource:2.11")
 
