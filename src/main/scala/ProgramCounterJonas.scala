@@ -1,6 +1,6 @@
 import chisel3._
 
-class ProgramCounter extends Module {
+class ProgramCounterJonas extends Module {
   val io = IO(new Bundle {
     val stop = Input(Bool())
     val jump = Input(Bool())

@@ -1,9 +1,3 @@
-module Incrementer(
-  input  [15:0] io_a,
-  output [15:0] io_out
-);
-  assign io_out = io_a + 16'h1; // @[ProgramCounter.scala 62:10]
-endmodule
 module ProgramCounter(
   input         clock,
   input         reset,
@@ -16,17 +10,11 @@ module ProgramCounter(
 `ifdef RANDOMIZE_REG_INIT
   reg [31:0] _RAND_0;
 `endif // RANDOMIZE_REG_INIT
-  wire [15:0] inc_io_a; // @[ProgramCounter.scala 14:19]
-  wire [15:0] inc_io_out; // @[ProgramCounter.scala 14:19]
-  reg [15:0] reg_; // @[ProgramCounter.scala 15:20]
-  wire  notOut = ~io_run; // @[ProgramCounter.scala 23:13]
-  wire  orOut = notOut | io_stop; // @[ProgramCounter.scala 27:19]
-  Incrementer inc ( // @[ProgramCounter.scala 14:19]
-    .io_a(inc_io_a),
-    .io_out(inc_io_out)
-  );
-  assign io_programCounter = reg_; // @[ProgramCounter.scala 48:21]
-  assign inc_io_a = reg_; // @[ProgramCounter.scala 47:12]
+  wire  w1 = ~io_run; // @[ProgramCounter.scala 18:9]
+  wire  w2 = io_stop | w1; // @[ProgramCounter.scala 19:17]
+  wire [15:0] w3 = io_programCounter + 16'h1; // @[ProgramCounter.scala 20:27]
+  reg [15:0] reg_; // @[ProgramCounter.scala 25:20]
+  assign io_programCounter = reg_; // @[ProgramCounter.scala 29:21]
 `ifdef RANDOMIZE_GARBAGE_ASSIGN
 `define RANDOMIZE
 `endif
@@ -74,12 +62,12 @@ end // initial
   always @(posedge clock) begin
     if (reset) begin
       reg_ <= 16'h0;
-    end else if (!(orOut)) begin
-      if (io_jump) begin
-        reg_ <= io_programCounterJump;
-      end else begin
-        reg_ <= inc_io_out;
-      end
+    end else if (w2) begin
+      reg_ <= io_programCounter;
+    end else if (io_jump) begin
+      reg_ <= io_programCounterJump;
+    end else begin
+      reg_ <= w3;
     end
   end
 endmodule
