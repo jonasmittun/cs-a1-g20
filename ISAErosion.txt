@@ -7,7 +7,7 @@ SET R6 19
 ----------------------- LOOP -------------------------------
 SET R1 0                // y = 0
 
-JEQ  60 R0 R6           // if x = 19 -> break
+JEQ  55 R0 R6           // if x = 19 -> break
 ADDI R0 R0 1            // x ++
 
 JEQ  10 R1 R6           // if y = 19 -> break
@@ -16,10 +16,10 @@ ADDI R1 R1 1            // y ++
 MULI R3 R0 20           // x * 20
 ADD  R3 R3 R1           // + y
 --------------------- BORDER PIXELS ------------------------
-JEQ 30 R0 R4            // if (x == 0)
-JEQ 30 R1 R4            // if (y == 0)
-JEQ 30 R0 R6            // if (x == 19)
-JEQ 30 R1 R6            // if (y == 19)
+JEQ 24 R0 R4            // if (x == 0)
+JEQ 24 R1 R4            // if (y == 0)
+JEQ 24 R0 R6            // if (x == 19)
+JEQ 24 R1 R6            // if (y == 19)
 
 ADDI R3 R3 399          // + 399
 STR  Mem[R3] R4         // output(x,y) = 0
