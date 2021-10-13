@@ -31,9 +31,9 @@ s:	SET  02 01
 	JEQI -b 13 00
 	//Else set pixel value to FF and jump to d
 	SET  02 FF
+	JMPI -d
 	//Set pixel value to 00
 b:	SET  02 00
-	JMPI -d
 	//Write pixel value to output
 d:	MULI 03 01 14
 	ADDI 04 03 00
