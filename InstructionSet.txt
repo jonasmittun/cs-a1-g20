@@ -16,24 +16,24 @@
 11: OR   R1  R2  R3  |   R1 = R2 or R3      -
 12: AND  R1  R2  R3  |   R1 = R2 and R3     -
 13: NOT  R1  R2      |   R1 = not(R2)       -
-14: XOR  R1  R2  R3  |   R1 = R2 or R3 but not both
-15: NAND R1  R2  R3  |   R1 = not(R2 and R3)
-16: NOR  R1  R2  R3  |   R1 = not(R2 or R3)
-17: XNOR R1  R2  R3  |   R1 = not(R2 or R3 but not both)
-18: SLL  R1  n       |   Shift R1 n bits left
-19: SRL  R1  n       |   Shift R1 n bits right
+14: NAND R1  R2  R3  |   R1 = not(R2 and R3)
+15: SLL  R1  n       |   Shift R1 n bits left
+16: SRL  R1  n       |   Shift R1 n bits right
 //Data transfer
-20: SET  R1  n       |   R1 = n             -
-21: LDD  R1  R2      |   R1 = Memory(R2)    -
-22: STR  R1  R2      |   Memory(R1) = R2    -
+17: SET  R1  n       |   R1 = n             -
+18: LDD  R1  R2      |   R1 = Memory(R2)    -
+19: STR  R1  R2      |   Memory(R1) = R2    -
 //Flow
-23: JMP  R1          |   Jump to line R1    -
-24: JEQ  R1  R2  R3  |   JMP R1 if R2 = R3  -
-25: JGT  R1  R2  R3  |   JMP R1 if R2 > R3  -
-26: JLT  R1  R2  R3  |   JMP R1 if R2 < R3  -
-27: JNQ  R1  R2  R3  |   JMP R1 if R2 != R3
-28: JEGT R1  R2  R3  |   JMP R1 if R2 >= R3
-29: JELT R1  R2  R3  |   JMP R1 if R2 =< R3
-//Maybe replace R3 with n for jump instructions, or remove instructions 27, 28, 16 and 17 to create JMPI, JGTI, JLTI and JEQI
+20: JMP  R1          |   Jump to line R1    -
+21: JEQ  R1  R2  R3  |   JMP R1 if R2 = R3  -
+22: JGT  R1  R2  R3  |   JMP R1 if R2 > R3  -
+23: JLT  R1  R2  R3  |   JMP R1 if R2 < R3  -
+24: JNQ  R1  R2  R3  |   JMP R1 if R2 != R3
+25: JMPI R1          |   Jump to line n
+26: JEQI R1  R2  R3  |   JMP n if R2 = R3
+27: JGTI R1  R2  R3  |   JMP n if R2 > R3
+28: JLTI R1  R2  R3  |   JMP n if R2 < R3
+29: JNQI R1  R2  R3  |   JMP n if R2 != R3
+30: n/a
 //
 31: END              |   Terminate          -
