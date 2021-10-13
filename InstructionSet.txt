@@ -3,15 +3,15 @@
 00: NOP              |   Does nothing       -
 //Arithmetic, n = integer
 01: ADD  R1  R2  R3  |   R1 = R2 + R3       -
-02: ADDI R1  R2   n  |   R1 = R2 + n        -
+02: ADDI R1  R2  n   |   R1 = R2 + n        -
 03: SUB  R1  R2  R3  |   R1 = R2 - R3       -
-04: SUBI R1  R2   n  |   R1 = R2 - n        -
+04: SUBI R1  R2  n   |   R1 = R2 - n        -
 05: MUL  R1  R2  R3  |   R1 = R2 * R3       -
-06: MULI R1  R2   n  |   R1 = R2 * n
+06: MULI R1  R2  n   |   R1 = R2 * n
 07: DIV  R1  R2  R3  |   R1 = R2 / R3
-08: DIVI R1  R2   n  |   R1 = R2 / n
+08: DIVI R1  R2  n   |   R1 = R2 / n
 09: MOD  R1  R2  R3  |   R1 = R2 % R3
-10: MODI R1  R2   n  |   R1 = R2 % n
+10: MODI R1  R2  n   |   R1 = R2 % n
 //Logical
 11: OR   R1  R2  R3  |   R1 = R2 or R3      -
 12: AND  R1  R2  R3  |   R1 = R2 and R3     -
@@ -29,11 +29,11 @@
 22: JGT  R1  R2  R3  |   JMP R1 if R2 > R3  -
 23: JLT  R1  R2  R3  |   JMP R1 if R2 < R3  -
 24: JNQ  R1  R2  R3  |   JMP R1 if R2 != R3
-25: JMPI R1          |   Jump to line n
-26: JEQI R1  R2  R3  |   JMP n if R2 = R3
-27: JGTI R1  R2  R3  |   JMP n if R2 > R3
-28: JLTI R1  R2  R3  |   JMP n if R2 < R3
-29: JNQI R1  R2  R3  |   JMP n if R2 != R3
+25: JMPI n           |   Jump to line n
+26: JEQI n   R2  R3  |   JMP n if R2 = R3
+27: JGTI n   R2  R3  |   JMP n if R2 > R3
+28: JLTI n   R2  R3  |   JMP n if R2 < R3
+29: JNQI n   R2  R3  |   JMP n if R2 != R3
 30: n/a
 //
 31: END              |   Terminate          -

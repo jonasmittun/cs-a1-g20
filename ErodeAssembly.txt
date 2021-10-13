@@ -11,13 +11,8 @@ s:	SET  02 01
 	SET  02 12
 	JGTI -b 00 02
 	JGTI -b 01 02
-	//Else jump to n
-	JMPI -n
-	//Set pixel value to 00
-b:	SET  02 00
-	JMPI -d
 	//If input pixel is 0 jump to b
-n:	MULI 03 01 14
+ 	MULI 03 01 14
 	ADDI 04 03 00
 	LDD  05 04
 	JEQI -b 05 00
@@ -36,9 +31,13 @@ n:	MULI 03 01 14
 	JEQI -b 13 00
 	//Else set pixel value to FF and jump to d
 	SET  02 FF
+	//Set pixel value to 00
+b:	SET  02 00
+	JMPI -d
 	//Write pixel value to output
 d:	MULI 03 01 14
 	ADDI 04 03 00
+	ADDI 04 04 0x190	//add 400 to current pos for output
 	STR  04 02
 	//Iterate x and y registers
 	ADDI 00 00 01
