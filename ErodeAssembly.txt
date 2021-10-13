@@ -1,0 +1,47 @@
+//Implementation of erosion step in assembly as defined by InstructionSet.txt
+	
+	//INIT
+	SET	 00 00
+	SET	 01 00
+	//START
+	//Jump to b if x or y are on border
+s:	SET  02 01
+	JLTI -b 00 02
+	JLTI -b 01 02
+	SET  02 12
+	JGTI -b 00 02
+	JGTI -b 01 02
+	//Else jump to n
+	JMPI -n
+	//Set pixel value to 00
+b:	SET  02 00
+	JMPI -d
+	//If input pixel is 0 jump to b
+n:	MULI 03 01 14
+	ADDI 04 03 00
+	LDD  05 04
+	JEQI -b 05 00
+	//If pixel has black neighbour jump to b
+	ADDI 06 04 01
+	SUBI 07 04 01
+	ADDI 08 04 14
+	SUBI 09 04 14
+	LDD  10 06
+	LDD  11 07
+	LDD  12 08
+	LDD  13 09
+	JEQI -b 10 00
+	JEQI -b 11 00
+	JEQI -b 12 00
+	JEQI -b 13 00
+	//Else set pixel value to FF and jump to d
+	SET  02 FF
+	//Write pixel value to output
+d:	MULI 03 01 14
+	ADDI 04 03 00
+	STR  04 02
+	//if x or y are not 20 jump to s
+	JLTI -s 00 13 
+	JLTI -s 01 13
+	//Else end program
+	END
