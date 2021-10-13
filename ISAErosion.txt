@@ -1,56 +1,48 @@
 ----------------------- INIT -------------------------------
-SET R0 0                // x
-SET R3 0                // (x,y) value
-SET R4 0                // BLACK
-SET R5 255              // WHITE
-SET R6 19
+SET  R0 0                // x
+SET  R3 0                // (x,y) value
+SET  R4 0                // BLACK
+SET  R5 255              // WHITE
+SET  R6 19
 ----------------------- LOOP -------------------------------
-SET R1 0                // y = 0
-
-JEQ  55 R0 R6           // if x = 19 -> break
+SET  R1 0               // y = 0
+JEQ  47 R0 R6           // if x = 19 -> break
 ADDI R0 R0 1            // x ++
-
-JEQ  10 R1 R6           // if y = 19 -> break
+JEQ   8 R1 R6           // if y = 19 -> break
 ADDI R1 R1 1            // y ++
 ------------- CALCULATE VALUE OF (x,y) to 1D ---------------
 MULI R3 R0 20           // x * 20
 ADD  R3 R3 R1           // + y
---------------------- BORDER PIXELS ------------------------
-JEQ 24 R0 R4            // if (x == 0)
-JEQ 24 R1 R4            // if (y == 0)
-JEQ 24 R0 R6            // if (x == 19)
-JEQ 24 R1 R6            // if (y == 19)
-
+-------------- BORDER PIXELS / BLACK PIXEL -----------------
+JEQ 23 R0 R4            // if (x == 0)
+JEQ 23 R1 R4            // if (y == 0)
+JEQ 23 R0 R6            // if (x == 19)
+JEQ 23 R1 R6            // if (y == 19)
+JEQ 23 R3 R4            // if input(x,y) == 0
+JMP 29
 ADDI R3 R3 399          // + 399
 STR  Mem[R3] R4         // output(x,y) = 0
-JMP  13                 // continue
+JMP  11                 // continue
 ------------------ SET (x,y) to 0 or 255 -------------------
-JEQ  24 R3 R4           // if input(x,y) == 0 -> output(x,y) = 0
-
 LD   R7 Mem[R3]         // R7 = input(x,y)
-
 SUBI R7 R7 20           // if input(x - 1,y) == 0
 LD   R7 Mem[R7]
-JEQ  24 R7 R4
-
+JEQ  23 R7 R4
 LD   R7 Mem[R3]         // Reset value
 ADDI R7 R7 20           // if input(x + 1,y) == 0
 LD   R7 Mem[R7]
-JEQ  24 R7 R4
-
+JEQ  23 R7 R4
 LD   R7 Mem[R3]         // Reset value
 SUBI R7 R7 1            // if input(x,y - 1) == 0
 LD   R7 Mem[R7]
-JEQ  24 R7 R4
-
+JEQ  23 R7 R4
 LD   R7 Mem[R3]         // Reset value
 ADDI R7 R7 1            // if input(x,y + 1) == 0
 LD   R7 Mem[R7]
-JEQ  24 R7 R4
-
+JEQ  23 R7 R4
 ADDI R3 R3 399          // + 399
 STR  Mem[R3] R5         // output(x,y) = 255
-JMP  13                 // continue
+JMP  11                 // continue
 ------------------------- END LOOP --------------------------
 END
 
