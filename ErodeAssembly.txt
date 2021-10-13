@@ -40,8 +40,13 @@ n:	MULI 03 01 14
 d:	MULI 03 01 14
 	ADDI 04 03 00
 	STR  04 02
+	//Iterate x and y registers
+	ADDI 00 00 01
+	JLTI -y 00 14
+	SET  00 00
+	ADDI 01 01
 	//if x or y are not 20 jump to s
-	JLTI -s 00 13 
+y:	JLTI -s 00 13 
 	JLTI -s 01 13
 	//Else end program
 	END
