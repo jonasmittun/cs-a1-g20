@@ -16,7 +16,7 @@ s:	SET  08 01
 	ADDI 04 03 00
 	LDD  05 04
 	SET  08 00
-	JEQI -b 05 07
+	JEQI -b 05 08
 	//If pixel has black neighbour jump to b
 	SET  08 00
 	ADDI 06 04 01
