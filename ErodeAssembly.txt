@@ -46,7 +46,7 @@ d:	MULI 03 01 14
 	SET  08 14
 	JLTI -y 00 08
 	SET  00 00
-	ADDI 01 01
+	ADDI 01 01 01
 	//if x or y are not 20 jump to s
 y:	SET  08 13
 	JLTI -s 00 08
