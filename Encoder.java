@@ -19,7 +19,7 @@ public class Encoder {
 		}
 		write(bin, fileOutput);
 	}
-	
+
 	//Remove comments and blank lines
 	public static ArrayList<String> read(String fileName){
 		FileInputStream input = null;
@@ -46,7 +46,8 @@ public class Encoder {
 		scanner.close();
 		return asm;
 	}
-	
+
+	//Encodes and handles jump labels
 	public static ArrayList<String> encode(ArrayList<String> input) throws Exception {
 		ArrayList<String> output = new ArrayList<String>();
 		ArrayList<String> jumps = new ArrayList<String>();
@@ -73,119 +74,227 @@ public class Encoder {
 			seg = scanner.next();
 			bits = "";
 			switch(seg) {
-			case "NOP":
-				bits = opcode(0);
-				bits += "000000000000000000000000000";
-				output.add(bits);
-				break;
-			case "ADDI":
-				bits = opcode(2);
-				bits += reg(scanner.next());
-				bits += reg(scanner.next());
-				bits += intermediate(scanner.next());
-				bits += "0";
-				output.add(bits);
-				break;
-			case "SUBI":
-				bits = opcode(4);
-				bits += reg(scanner.next());
-				bits += reg(scanner.next());
-				bits += intermediate(scanner.next());
-				bits += "0";
-				output.add(bits);
-				break;
-			case "MULI":
-				bits = opcode(6);
-				bits += reg(scanner.next());
-				bits += reg(scanner.next());
-				bits += intermediate(scanner.next());
-				bits += "0";
-				output.add(bits);
-				break;
-			case "SET":
-				bits = opcode(17);
-				bits += reg(scanner.next());
-				bits += intermediate(scanner.next());
-				bits += "000000";
-				output.add(bits);
-				break;
-			case "LDD":
-				bits = opcode(18);
-				bits += reg(scanner.next());
-				bits += intermediate(scanner.next());
-				bits += "000000";
-				output.add(bits);
-				break;
-			case "STR":
-				bits = opcode(19);				
-				bits += intermediate(scanner.next());
-				bits += reg(scanner.next());
-				bits += "000000";
-				output.add(bits);
-				break;
-			case "JMPI":
-				bits = opcode(25);
-				bits += jumpLabel(scanner.next(), jumps);
-				bits += "00000000000";
-				output.add(bits);
-				break;
-			case "JEQI":
-				bits = opcode(26);
-				bits += jumpLabel(scanner.next(), jumps);
-				bits += reg(scanner.next());
-				bits += reg(scanner.next());
-				bits += "0";
-				output.add(bits);
-				break;
-			case "JGTI":
-				bits = opcode(27);
-				bits += jumpLabel(scanner.next(), jumps);
-				bits += reg(scanner.next());
-				bits += reg(scanner.next());
-				bits += "0";
-				output.add(bits);
-				break;
-			case "JLTI":
-				bits = opcode(28);
-				bits += jumpLabel(scanner.next(), jumps);
-				bits += reg(scanner.next());
-				bits += reg(scanner.next());
-				bits += "0";
-				output.add(bits);
-				break;
-			case "END":
-				bits = opcode(31);
-				bits += "000000000000000000000000000";
-				output.add(bits);
-				break;
-			default:
-				output.add("ERROR");
+				case "NOP":
+					bits = opcode(0);
+					bits += "000000000000000000000000000";
+					output.add(bits);
+					break;
+				case "ADD":
+					bits = opcode(1);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += "000000000000";
+					output.add(bits);
+					break;
+				case "ADDI":
+					bits = opcode(2);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += intermediate(scanner.next());
+					bits += "0";
+					output.add(bits);
+					break;
+				case "SUB":
+					bits = opcode(3);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += "000000000000";
+					output.add(bits);
+					break;
+				case "SUBI":
+					bits = opcode(4);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += intermediate(scanner.next());
+					bits += "0";
+					output.add(bits);
+					break;
+				case "MUL":
+					bits = opcode(5);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += "000000000000";
+					output.add(bits);
+					break;
+				case "MULI":
+					bits = opcode(6);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += intermediate(scanner.next());
+					bits += "0";
+					output.add(bits);
+					break;
+				case "DIV":
+					bits = opcode(7);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += "000000000000";
+					output.add(bits);
+					break;
+				case "DIVI":
+					bits = opcode(8);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += intermediate(scanner.next());
+					bits += "0";
+					output.add(bits);
+					break;
+				case "MOD":
+					bits = opcode(9);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += "000000000000";
+					output.add(bits);
+					break;
+				case "MODI":
+					bits = opcode(10);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += intermediate(scanner.next());
+					bits += "0";
+					output.add(bits);
+					break;
+				case "OR":
+					bits = opcode(11);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += "000000000000";
+					output.add(bits);
+					break;
+				case "AND":
+					bits = opcode(12);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += "000000000000";
+					output.add(bits);
+					break;
+				case "NOT":
+					bits = opcode(13);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += "00000000000000000";
+					output.add(bits);
+					break;
+				case "NAND":
+					bits = opcode(14);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += "000000000000";
+					output.add(bits);
+					break;
+				case "SLL":
+					bits = opcode(15);
+					bits += reg(scanner.next());
+					bits += intermediate(scanner.next());
+					bits += "000000";
+					output.add(bits);
+					break;
+				case "SRL":
+					bits = opcode(16);
+					bits += reg(scanner.next());
+					bits += intermediate(scanner.next());
+					bits += "000000";
+					output.add(bits);
+					break;
+				case "SET":
+					bits = opcode(17);
+					bits += reg(scanner.next());
+					bits += intermediate(scanner.next());
+					bits += "000000";
+					output.add(bits);
+					break;
+				case "LDD":
+					bits = opcode(18);
+					bits += reg(scanner.next());
+					bits += intermediate(scanner.next());
+					bits += "000000";
+					output.add(bits);
+					break;
+				case "STR":
+					bits = opcode(19);
+					bits += intermediate(scanner.next());
+					bits += reg(scanner.next());
+					bits += "000000";
+					output.add(bits);
+					break;
+				// opcode(20-24) non intermediate jumps currently not used
+				case "JMPI":
+					bits = opcode(25);
+					bits += jumpLabel(scanner.next(), jumps);
+					bits += "00000000000";
+					output.add(bits);
+					break;
+				case "JEQI":
+					bits = opcode(26);
+					bits += jumpLabel(scanner.next(), jumps);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += "0";
+					output.add(bits);
+					break;
+				case "JGTI":
+					bits = opcode(27);
+					bits += jumpLabel(scanner.next(), jumps);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += "0";
+					output.add(bits);
+					break;
+				case "JLTI":
+					bits = opcode(28);
+					bits += jumpLabel(scanner.next(), jumps);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += "0";
+					output.add(bits);
+					break;
+				case "JNQI":
+					bits = opcode(29);
+					bits += jumpLabel(scanner.next(), jumps);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += "0";
+					output.add(bits);
+					break;
+				// opcode(30) currently unused
+				case "END":
+					bits = opcode(31);
+					bits += "000000000000000000000000000";
+					output.add(bits);
+					break;
+				default:
+					output.add("ERROR");
 			}
 		}
-		
-		System.out.println(input);
-		System.out.println(jumps);
-		for(int i = 0; i < output.size(); i++) {
-			System.out.println(output.get(i));
-		}
-		
+		//DEBUG: System prints for the three array lists
+		//System.out.println(input);
+		//System.out.println(jumps);
+		//System.out.println(output);
 		return output;
 	}
-	
+
 	private static String opcode(int number) {
 		return String.format("%5s", Integer.toBinaryString(number)).replace(' ', '0');
 	}
-	
+
 	private static String reg(String number) {
 		int holder = Integer.parseInt(number, 16);
 		return String.format("%5s", Integer.toBinaryString(holder)).replace(' ', '0');
 	}
-	
+
 	private static String intermediate(String number) {
 		int holder = Integer.parseInt(number, 16);
 		return String.format("%16s", Integer.toBinaryString(holder)).replace(' ', '0');
 	}
-	
+
 	private static String jumpLabel(String input, ArrayList<String> jumps) throws Exception {
 		String seg = input.substring(1);
 		int holder = -1;
@@ -200,8 +309,18 @@ public class Encoder {
 		}
 		return String.format("%16s", Integer.toBinaryString(holder)).replace(' ', '0');
 	}
-	
+
+	//https://stackoverflow.com/a/2885241/14986889
 	public static void write(ArrayList<String> bin, String fileOutput) {
-		
+		try {
+			Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileOutput), "utf-8"));
+			for(int i = 0; i < bin.size(); i++) {
+				writer.write(bin.get(i) + "\n");
+			}
+			writer.close();
+		} catch (IOException e) {
+			System.out.println("Error writing to: " + fileOutput);
+			e.printStackTrace();
+		}
 	}
 }
