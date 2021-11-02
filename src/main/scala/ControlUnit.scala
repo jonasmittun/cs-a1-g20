@@ -327,6 +327,6 @@ class ControlUnit extends Module {
     io.write_enable_dm := 0.U         //Don't write to data memory
     io.write_enable_reg := 0.U        //Don't write to register
 
-    io.ALU_op := 0.U                  //ALU operation 1010
+    io.ALU_op := 0.U                  //ALU operation 0000
   }
 }
