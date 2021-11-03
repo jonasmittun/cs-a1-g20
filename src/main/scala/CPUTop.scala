@@ -35,6 +35,41 @@ class CPUTop extends Module {
   //Continue here with your connections
   ////////////////////////////////////////////
 
+  //Wires
+  val stop = Wire(Bool())
+  val jump = Wire(Bool())
+  val counterJump = Wire(UInt(16.W))
+  val counter = Wire(UInt(16.W))
+  val instruction = Wire(UInt(32.W))
+  val opcode = Wire(UInt(5.W))
+  val writeSel = Wire(UInt(5.W))
+  val aSel = Wire(UInt(5.W))
+  val bSel = Wire(UInt(5.W))
+  val intermediate = Wire(UInt(16.W))
+  val writeEnable
+
+  //ProgramCounter connections
+  programCounter.io.run := io.run
+  programCounter.io.stop := stop
+  programCounter.io.jump := jump
+  programCounter.io.programCounterJump := counterJump
+  counter := programCounter.io.programCounter
+
+  //ProgramMemory connections
+  programMemory.io.address := counter
+  instruction := programMemory.io.instructionRead
+
+  //Register
+
+
+  //Wire splits
+  counterJump := instruction(16,31)
+  opcode := instruction(27,31)
+  writeSel := instruction(22,26)
+  aSel := instruction(17,21)
+  bSel := instruction(12,16)
+  intermediate := instruction(1,16)
+
   //This signals are used by the tester for loading the program to the program memory, do not touch
   programMemory.io.testerAddress := io.testerProgMemAddress
   io.testerProgMemDataRead := programMemory.io.testerDataRead

@@ -15,6 +15,8 @@ class ControlUnit extends Module {
     val write_enable_reg = Output(Bool())
   })
 
+  //0x00 reserved for NOP
+
   when (io.opcode === 0x01.U) {       //ADD
     io.mux_sel1 := 1.U                //Use ALU output
     io.mux_sel2 := 0.U                //Use register values
