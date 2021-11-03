@@ -113,16 +113,16 @@ class CPUTop extends Module {
 
   //Intermediate mux
   when (intSel){
-    intMuxOut := b
-  } .otherwise {
     intMuxOut := Cat(0.U(16.W),intermediate)
+  } .otherwise {
+    intMuxOut := b
   }
 
   //Data mux
   when (writeDataSel){
-    writeData := dataRead
-  } .otherwise {
     writeData := result
+  } .otherwise {
+    writeData := dataRead
   }
 
   //AND
