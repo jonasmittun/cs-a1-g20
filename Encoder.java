@@ -72,11 +72,11 @@ public class Encoder {
 		for(int i = 0; i < input.size(); i++) {
 			scanner = new Scanner(input.get(i));
 			seg = scanner.next();
-			bits = "";
 			switch(seg) {
 				case "NOP":
 					bits = opcode(0);
 					bits += "000000000000000000000000000";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "ADD":
@@ -85,6 +85,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += reg(scanner.next());
 					bits += "000000000000";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "ADDI":
@@ -93,6 +94,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += intermediate(scanner.next());
 					bits += "0";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "SUB":
@@ -101,6 +103,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += reg(scanner.next());
 					bits += "000000000000";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "SUBI":
@@ -109,6 +112,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += intermediate(scanner.next());
 					bits += "0";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "MUL":
@@ -117,6 +121,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += reg(scanner.next());
 					bits += "000000000000";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "MULI":
@@ -125,6 +130,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += intermediate(scanner.next());
 					bits += "0";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "DIV":
@@ -133,6 +139,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += reg(scanner.next());
 					bits += "000000000000";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "DIVI":
@@ -141,6 +148,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += intermediate(scanner.next());
 					bits += "0";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "MOD":
@@ -149,6 +157,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += reg(scanner.next());
 					bits += "000000000000";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "MODI":
@@ -157,6 +166,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += intermediate(scanner.next());
 					bits += "0";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "OR":
@@ -165,6 +175,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += reg(scanner.next());
 					bits += "000000000000";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "AND":
@@ -173,6 +184,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += reg(scanner.next());
 					bits += "000000000000";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "NOT":
@@ -180,6 +192,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += reg(scanner.next());
 					bits += "00000000000000000";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "NAND":
@@ -188,6 +201,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += reg(scanner.next());
 					bits += "000000000000";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "SLL":
@@ -195,6 +209,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += intermediate(scanner.next());
 					bits += "000000";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "SRL":
@@ -202,6 +217,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += intermediate(scanner.next());
 					bits += "000000";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "SET":
@@ -209,6 +225,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += intermediate(scanner.next());
 					bits += "000000";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "LDD":
@@ -216,6 +233,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += intermediate(scanner.next());
 					bits += "000000";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "STR":
@@ -223,6 +241,7 @@ public class Encoder {
 					bits += intermediate(scanner.next());
 					bits += reg(scanner.next());
 					bits += "000000";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				// opcode(20-24) non intermediate jumps currently not used
@@ -230,6 +249,7 @@ public class Encoder {
 					bits = opcode(25);
 					bits += jumpLabel(scanner.next(), jumps);
 					bits += "00000000000";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "JEQI":
@@ -238,6 +258,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += reg(scanner.next());
 					bits += "0";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "JGTI":
@@ -246,6 +267,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += reg(scanner.next());
 					bits += "0";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "JLTI":
@@ -254,6 +276,7 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += reg(scanner.next());
 					bits += "0";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "JNQI":
@@ -262,12 +285,14 @@ public class Encoder {
 					bits += reg(scanner.next());
 					bits += reg(scanner.next());
 					bits += "0";
+					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				// opcode(30) currently unused
 				case "END":
 					bits = opcode(31);
 					bits += "000000000000000000000000000";
+					bits += "\".U(32.W)";
 					output.add(bits);
 					break;
 				default:
@@ -282,7 +307,7 @@ public class Encoder {
 	}
 
 	private static String opcode(int number) {
-		return String.format("%5s", Integer.toBinaryString(number)).replace(' ', '0');
+		return "\"b" + String.format("%5s", Integer.toBinaryString(number)).replace(' ', '0');
 	}
 
 	private static String reg(String number) {
