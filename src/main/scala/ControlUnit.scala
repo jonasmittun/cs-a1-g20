@@ -16,6 +16,14 @@ class ControlUnit extends Module {
   })
 
   //0x00 reserved for NOP
+  io.ALU_op := 0.U
+  io.c_jump := 0.U
+  io.mux_sel1 := 0.U
+  io.mux_sel2 := 0.U
+  io.stop := 0.U
+  io.u_jump := 0.U
+  io.write_enable_dm := 0.U
+  io.write_enable_reg := 0.U
 
   when (io.opcode === 0x01.U) {       //ADD
     io.mux_sel1 := 1.U                //Use ALU output
