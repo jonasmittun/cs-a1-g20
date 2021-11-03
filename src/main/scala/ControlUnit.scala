@@ -115,51 +115,6 @@ class ControlUnit extends Module {
     io.ALU_op := 0x3.U                //ALU operation 0011
   }
 
-  when (io.opcode === 0x0B.U) {       //OR
-    io.mux_sel1 := 1.U                //Use ALU output
-    io.mux_sel2 := 0.U                //Use register values
-
-    io.stop := 0.U                    //Don't stop
-
-    io.c_jump := 0.U                  //Don't jump
-    io.u_jump := 0.U
-
-    io.write_enable_dm := 0.U         //Don't write to data memory
-    io.write_enable_reg := 1.U        //Write to register
-
-    io.ALU_op := 0x4.U                //ALU operation 0100
-  }
-
-  when (io.opcode === 0x0C.U) {       //AND
-    io.mux_sel1 := 1.U                //Use ALU output
-    io.mux_sel2 := 0.U                //Use register values
-
-    io.stop := 0.U                    //Don't stop
-
-    io.c_jump := 0.U                  //Don't jump
-    io.u_jump := 0.U
-
-    io.write_enable_dm := 0.U         //Don't write to data memory
-    io.write_enable_reg := 1.U        //Write to register
-
-    io.ALU_op := 0x5.U                //ALU operation 0101
-  }
-
-  when (io.opcode === 0x0D.U) {       //NOT
-    io.mux_sel1 := 1.U                //Use ALU output
-    io.mux_sel2 := 0.U                //Use register values
-
-    io.stop := 0.U                    //Don't stop
-
-    io.c_jump := 0.U                  //Don't jump
-    io.u_jump := 0.U
-
-    io.write_enable_dm := 0.U         //Don't write to data memory
-    io.write_enable_reg := 1.U        //Write to register
-
-    io.ALU_op := 0x6.U                //ALU operation 0110
-  }
-
   when (io.opcode === 0x11.U) {       //SET
     io.mux_sel1 := 1.U                //Use ALU output
     io.mux_sel2 := 1.U                //Use immediate value

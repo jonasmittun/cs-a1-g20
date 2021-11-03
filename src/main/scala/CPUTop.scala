@@ -35,111 +35,37 @@ class CPUTop extends Module {
   //Continue here with your connections
   ////////////////////////////////////////////
 
-  //Wires
-  val stop = Wire(Bool())
-  val jump = Wire(Bool())
-  val counterJump = Wire(UInt(16.W))
-  val counter = Wire(UInt(16.W))
-  val instruction = Wire(UInt(32.W))
-  val opcode = Wire(UInt(5.W))
-  val writeSel = Wire(UInt(5.W))
-  val aSel = Wire(UInt(5.W))
-  val bSel = Wire(UInt(5.W))
-  val intermediate = Wire(UInt(16.W))
-  val writeEnableReg = Wire(Bool())
-  val writeData = Wire(UInt(32.W))
-  val a = Wire(UInt(32.W))
-  val b = Wire(UInt(32.W))
-  val uJump = Wire(Bool())
-  val cJump = Wire(Bool())
-  val writeEnableDat = Wire(Bool())
-  val aluOp = Wire(UInt(4.W))
-  val intSel = Wire(Bool())
-  val writeDataSel = Wire(Bool())
-  val result = Wire(UInt(32.W))
-  val boolResult = Wire(Bool())
-  val intMuxOut = Wire(UInt(32.W))
-  val dataRead = Wire(UInt(32.W))
-  val dataWrite = Wire(UInt(32.W))
-  val dataAddress = Wire(UInt(16.W))
-  val jumpAndOr = Wire(Bool())
-
   //Done signal to CPUTopTester
   io.done := controlUnit.io.stop
 
   //ProgramCounter connections
   programCounter.io.run := io.run
-  programCounter.io.stop := stop
-  programCounter.io.jump := jump
-  programCounter.io.programCounterJump := counterJump
-  counter := programCounter.io.programCounter
+  programCounter.io.stop := controlUnit.io.stop
+  programCounter.io.jump := controlUnit.io.u_jump | (controlUnit.io.c_jump & alu.io.boolVal)
+  programCounter.io.programCounterJump := programMemory.io.instructionRead(16, 1)
 
   //ProgramMemory connections
-  programMemory.io.address := counter
-  instruction := programMemory.io.instructionRead
+  programMemory.io.address := programCounter.io.programCounter
 
   //Register
-  registerFile.io.writeEnable := writeEnableReg
-  registerFile.io.writeSel := writeSel
-  registerFile.io.aSel := aSel
-  registerFile.io.bSel := bSel
-  registerFile.io.writeData := writeData
-  a := registerFile.io.aOut
-  b := registerFile.io.bOut
+  registerFile.io.writeEnable := controlUnit.io.write_enable_reg
+  registerFile.io.writeSel := programMemory.io.instructionRead(26, 22)
+  registerFile.io.aSel := programMemory.io.instructionRead(21, 17)
+  registerFile.io.bSel := programMemory.io.instructionRead(16, 12)
+  registerFile.io.writeData := Mux(controlUnit.io.mux_sel1, dataMemory.io.dataRead, alu.io.result)
 
   //Control Unit
-  controlUnit.io.opcode := opcode
-  stop := controlUnit.io.stop
-  uJump := controlUnit.io.u_jump
-  cJump := controlUnit.io.c_jump
-  writeEnableDat := controlUnit.io.write_enable_dm
-  aluOp := controlUnit.io.ALU_op
-  intSel := controlUnit.io.mux_sel2
-  writeDataSel := controlUnit.io.mux_sel1
-  writeEnableReg := controlUnit.io.write_enable_reg
+  controlUnit.io.opcode := programMemory.io.instructionRead(31, 27)
 
   //ALU
-  alu.io.a := a
-  alu.io.b := intMuxOut
-  alu.io.op := aluOp
-  result := alu.io.result
-  boolResult := alu.io.boolVal
+  alu.io.a := registerFile.io.aOut
+  alu.io.b := Mux(controlUnit.io.mux_sel2, registerFile.io.bOut, programMemory.io.instructionRead(16, 1))
+  alu.io.op := controlUnit.io.ALU_op
 
   //Data Memory
-  dataMemory.io.writeEnable := writeEnableDat
-  dataMemory.io.dataWrite := dataWrite
-  dataMemory.io.address := dataAddress
-  dataRead := dataMemory.io.dataRead
-
-  //Intermediate mux
-  when (intSel){
-    intMuxOut := b
-  } .otherwise {
-    intMuxOut := Cat(0.U(16.W),intermediate)
-  }
-
-  //Data mux
-  when (writeDataSel){
-    writeData := dataRead
-  } .otherwise {
-    writeData := result
-  }
-
-  //AND
-  jumpAndOr := boolResult & cJump
-
-  //OR
-  jump := jumpAndOr | uJump
-
-  //Wire splits
-  counterJump := instruction(16, 1)
-  opcode := instruction(31, 27)
-  writeSel := instruction(26, 22)
-  aSel := instruction(21, 17)
-  bSel := instruction(16, 12)
-  intermediate := instruction(16, 1)
-  dataWrite := b
-  dataAddress := a(15, 0)
+  dataMemory.io.writeEnable := controlUnit.io.write_enable_dm
+  dataMemory.io.dataWrite := registerFile.io.bOut
+  dataMemory.io.address := registerFile.io.aOut
 
   //This signals are used by the tester for loading the program to the program memory, do not touch
   programMemory.io.testerAddress := io.testerProgMemAddress
