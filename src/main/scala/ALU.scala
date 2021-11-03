@@ -38,7 +38,7 @@ class ALU extends Module {
       io.result := io.b
     }
     is(JEQI) {
-      io.boolVal := io.a === io.b
+      io.boolVal := (io.a === io.b)
     }
     is(JGTI) {
       io.boolVal := io.a > io.b

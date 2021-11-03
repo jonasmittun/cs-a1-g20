@@ -131,7 +131,7 @@ class ControlUnit extends Module {
   }
 
   when (io.opcode === 0x12.U) {       //LDD
-    io.mux_sel1 := true.B               //Use ALU output
+    io.mux_sel1 := false.B               //Use ALU output
     io.mux_sel2 := false.B                //Use register values
 
     io.stop := false.B                    //Don't stop
@@ -142,7 +142,7 @@ class ControlUnit extends Module {
     io.write_enable_dm := false.B         //Don't write to data memory
     io.write_enable_reg := true.B       //Write to register
 
-    io.ALU_op := 0x8.U                //ALU operation 1000
+    io.ALU_op := 0.U                //ALU operation 1000
   }
 
   when (io.opcode === 0x13.U) {       //STR
@@ -157,7 +157,7 @@ class ControlUnit extends Module {
     io.write_enable_dm := 1.U         //Write to data memory
     io.write_enable_reg := false.B        //Don't write to register
 
-    io.ALU_op := false.B                  //ALU operation 0000
+    io.ALU_op := 0.U                 //ALU operation 0000
   }
 
   when (io.opcode === 0x19.U) {       //JMPI
@@ -172,7 +172,7 @@ class ControlUnit extends Module {
     io.write_enable_dm := false.B         //Don't write to data memory
     io.write_enable_reg := false.B        //Don't write to register
 
-    io.ALU_op := false.B                  //ALU operation 0000
+    io.ALU_op := 0.U                  //ALU operation 0000
   }
 
   when (io.opcode === 0x15.U) {       //JEQ
@@ -222,7 +222,7 @@ class ControlUnit extends Module {
 
   when (io.opcode === 0x1A.U) {       //JEQI
     io.mux_sel1 := true.B                //Use ALU output
-    io.mux_sel2 := true.B                //Use immediate value
+    io.mux_sel2 := false.B                //Use register values
 
     io.stop := false.B                    //Don't stop
 

@@ -234,18 +234,17 @@ public class Encoder {
 				case "LDD":
 					bits = opcode(18);
 					bits += reg(scanner.next());
-					bits += "00000";
-					bits += intermediate(scanner.next());
-					bits += "0";
+					bits += reg(scanner.next());
+					bits += "00000000000000000";
 					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "STR":
 					bits = opcode(19);
-					bits += reg(scanner.next());
 					bits += "00000";
-					bits += intermediate(scanner.next());
-					bits += "0";
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
+					bits += "000000000000";
 					bits += "\".U(32.W),";
 					output.add(bits);
 					break;

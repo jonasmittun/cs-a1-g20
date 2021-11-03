@@ -1,16 +1,16 @@
     SET 01 00
     SET 02 00
-    SET 03 12
+    SET 03 13
     SET 04 00
-    SET 05 14
-l:  MUL 05 05 02
+l:  SET 05 14
+    MUL 05 05 02
     ADD 05 05 01
     JEQI 01 03 -f
     JEQI 01 04 -f
     JEQI 02 03 -f
     JEQI 02 04 -f
     JMPI -e
-f:  STR 04 05
+f:  STR 05 04
     JMPI -s
 e:  LDD 06 05
     ADDI 07 05 190
@@ -28,14 +28,14 @@ e:  LDD 06 05
     LDD 08 08
     JEQI 08 04 -b
     JMPI -w
-b:  STR 04 07
+b:  STR 07 04
     JMPI -s
-w:  LDD 09 FF
-    STR 04 09
+w:  SET 09 FF
+    STR 07 09
 s:  JEQI 02 03 -y
     ADDI 02 02 01
     JMPI -l
-y:  LDD 01 00
+y:  SET 02 00
     JEQI 01 03 -x
     ADDI 01 01 01
     JMPI -l
