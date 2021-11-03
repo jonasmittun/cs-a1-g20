@@ -64,6 +64,9 @@ class CPUTop extends Module {
   val dataAddress = Wire(UInt(16.W))
   val jumpAndOr = Wire(Bool())
 
+  //Done signal to CPUTopTester
+  io.done := controlUnit.io.stop
+
   //ProgramCounter connections
   programCounter.io.run := io.run
   programCounter.io.stop := stop
@@ -93,6 +96,7 @@ class CPUTop extends Module {
   aluOp := controlUnit.io.ALU_op
   intSel := controlUnit.io.mux_sel2
   writeDataSel := controlUnit.io.mux_sel1
+  writeEnableReg := controlUnit.io.write_enable_reg
 
   //ALU
   alu.io.a := a
@@ -122,14 +126,14 @@ class CPUTop extends Module {
   jump := jumpAndOr | uJump
 
   //Wire splits
-  counterJump := instruction(16,31)
-  opcode := instruction(27,31)
-  writeSel := instruction(22,26)
-  aSel := instruction(17,21)
-  bSel := instruction(12,16)
-  intermediate := instruction(1,16)
+  counterJump := instruction(31, 16)
+  opcode := instruction(31, 27)
+  writeSel := instruction(26, 22)
+  aSel := instruction(21, 17)
+  bSel := instruction(16, 12)
+  intermediate := instruction(16, 1)
   dataWrite := b
-  dataAddress := b(16,31)
+  dataAddress := b(31, 16)
 
   //This signals are used by the tester for loading the program to the program memory, do not touch
   programMemory.io.testerAddress := io.testerProgMemAddress
