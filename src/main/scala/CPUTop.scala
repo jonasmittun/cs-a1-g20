@@ -46,7 +46,23 @@ class CPUTop extends Module {
   val aSel = Wire(UInt(5.W))
   val bSel = Wire(UInt(5.W))
   val intermediate = Wire(UInt(16.W))
-  val writeEnable
+  val writeEnableReg = Wire(Bool())
+  val writeData = Wire(UInt(32.W))
+  val a = Wire(UInt(32.W))
+  val b = Wire(UInt(32.W))
+  val uJump = Wire(Bool())
+  val cJump = Wire(Bool())
+  val writeEnableDat = Wire(Bool())
+  val aluOp = Wire(UInt(4.W))
+  val intSel = Wire(Bool())
+  val writeDataSel = Wire(Bool())
+  val result = Wire(UInt(32.W))
+  val boolResult = Wire(Bool())
+  val bMux = Wire(Bool())
+  val dataRead = Wire(UInt(32.W))
+  val dataWrite = Wire(UInt(32.W))
+  val dataAddress = Wire(UInt(16.W))
+  val jumpAndOr = Wire(Bool())
 
   //ProgramCounter connections
   programCounter.io.run := io.run
@@ -60,7 +76,50 @@ class CPUTop extends Module {
   instruction := programMemory.io.instructionRead
 
   //Register
+  registerFile.io.writeEnable := writeEnableReg
+  registerFile.io.writeSel := writeSel
+  registerFile.io.aSel := aSel
+  registerFile.io.bSel := bSel
+  registerFile.io.writeData := writeData
+  a := registerFile.io.aOut
+  b := registerFile.io.bOut
 
+  //Control Unit
+  controlUnit.io.opcode := opcode
+  stop := controlUnit.io.stop
+  uJump := controlUnit.io.u_jump
+  cJump := controlUnit.io.c_jump
+  writeEnableDat := controlUnit.io.write_enable_dm
+  aluOp := controlUnit.io.ALU_op
+  intSel := controlUnit.io.mux_sel2
+  writeDataSel := controlUnit.io.mux_sel1
+
+  //ALU
+  alu.io.a := a
+  alu.io.b := bMux
+  alu.io.op := aluOp
+  result := alu.io.result
+  boolResult := alu.io.boolVal
+
+  //Data Memory
+  dataMemory.io.writeEnable := writeEnableDat
+  dataMemory.io.dataWrite := dataWrite
+  dataMemory.io.address := dataAddress
+  dataRead := dataMemory.io.dataRead
+
+  //Intermediate mux
+  val intMux = Mux(intSel, b, intermediate)
+  bMux := intMux
+
+  //Data mux
+  val datMux = Mux(writeDataSel, dataRead, result)
+  writeData := datMux
+
+  //AND
+  jumpAndOr := boolResult & cJump
+
+  //OR
+  jump := jumpAndOr | uJump
 
   //Wire splits
   counterJump := instruction(16,31)
@@ -69,6 +128,8 @@ class CPUTop extends Module {
   aSel := instruction(17,21)
   bSel := instruction(12,16)
   intermediate := instruction(1,16)
+  dataWrite := b
+  dataAddress := b(16,31)
 
   //This signals are used by the tester for loading the program to the program memory, do not touch
   programMemory.io.testerAddress := io.testerProgMemAddress
