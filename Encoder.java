@@ -207,83 +207,89 @@ public class Encoder {
 				case "SLL":
 					bits = opcode(15);
 					bits += reg(scanner.next());
+					bits += "00000";
 					bits += intermediate(scanner.next());
-					bits += "000000";
+					bits += "0";
 					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "SRL":
 					bits = opcode(16);
 					bits += reg(scanner.next());
+					bits += "00000";
 					bits += intermediate(scanner.next());
-					bits += "000000";
+					bits += "0";
 					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "SET":
 					bits = opcode(17);
 					bits += reg(scanner.next());
+					bits += "00000";
 					bits += intermediate(scanner.next());
-					bits += "000000";
+					bits += "0";
 					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "LDD":
 					bits = opcode(18);
 					bits += reg(scanner.next());
+					bits += "00000";
 					bits += intermediate(scanner.next());
-					bits += "000000";
+					bits += "0";
 					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "STR":
 					bits = opcode(19);
-					bits += intermediate(scanner.next());
 					bits += reg(scanner.next());
-					bits += "000000";
+					bits += "00000";
+					bits += intermediate(scanner.next());
+					bits += "0";
 					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				// opcode(20-24) non intermediate jumps currently not used
 				case "JMPI":
 					bits = opcode(25);
+					bits += "0000000000";
 					bits += jumpLabel(scanner.next(), jumps);
-					bits += "00000000000";
+					bits += "0";
 					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "JEQI":
 					bits = opcode(26);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
 					bits += jumpLabel(scanner.next(), jumps);
-					bits += reg(scanner.next());
-					bits += reg(scanner.next());
 					bits += "0";
 					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "JGTI":
 					bits = opcode(27);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
 					bits += jumpLabel(scanner.next(), jumps);
-					bits += reg(scanner.next());
-					bits += reg(scanner.next());
 					bits += "0";
 					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "JLTI":
 					bits = opcode(28);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
 					bits += jumpLabel(scanner.next(), jumps);
-					bits += reg(scanner.next());
-					bits += reg(scanner.next());
 					bits += "0";
 					bits += "\".U(32.W),";
 					output.add(bits);
 					break;
 				case "JNQI":
 					bits = opcode(29);
+					bits += reg(scanner.next());
+					bits += reg(scanner.next());
 					bits += jumpLabel(scanner.next(), jumps);
-					bits += reg(scanner.next());
-					bits += reg(scanner.next());
 					bits += "0";
 					bits += "\".U(32.W),";
 					output.add(bits);

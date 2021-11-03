@@ -6,31 +6,31 @@
 	//START
 	//If x or y are on border jump to b
 s:	SET  08 01
-	JLTI -b 00 08
-	JLTI -b 01 08
+	JLTI 00 08 -b
+	JLTI 01 08 -b
 	SET  08 12
-	JGTI -b 00 08
-	JGTI -b 01 08
+	JGTI 00 08 -b
+	JGTI 01 08 -b
 	//If input pixel is 0 jump to b
  	MULI 03 01 14
 	ADDI 04 03 00
 	LDD  05 04
 	SET  08 00
-	JEQI -b 05 08
+	JEQI 05 08 -b
 	//If pixel has black neighbour jump to b
 	SET  08 00
 	ADDI 06 04 01
 	LDD  07 06
-	JEQI -b 07 08
+	JEQI 07 08 -b
 	SUBI 06 04 01
 	LDD  07 06
-	JEQI -b 07 08
+	JEQI 07 08 -b
 	ADDI 06 04 14
 	LDD  07 06
-	JEQI -b 07 08
+	JEQI 07 08 -b
 	SUBI 06 04 14
 	LDD  07 06
-	JEQI -b 07 08
+	JEQI 07 08 -b
 	//Else set pixel value to FF and jump to d
 	SET  02 FF
 	JMPI -d
@@ -44,12 +44,12 @@ d:	MULI 03 01 14
 	//Iterate x and y registers
 	ADDI 00 00 01
 	SET  08 14
-	JLTI -y 00 08
+	JLTI 00 08 -y
 	SET  00 00
 	ADDI 01 01 01
 	//if x or y are not 20 jump to s
 y:	SET  08 13
-	JLTI -s 00 08
-	JLTI -s 01 08
+	JLTI 00 08 -s
+	JLTI 01 08 -s
 	//Else end program
 	END
