@@ -10,11 +10,11 @@ module ProgramCounter(
 `ifdef RANDOMIZE_REG_INIT
   reg [31:0] _RAND_0;
 `endif // RANDOMIZE_REG_INIT
-  wire  w1 = ~io_run; // @[ProgramCounter.scala 18:9]
-  wire  w2 = io_stop | w1; // @[ProgramCounter.scala 19:17]
-  wire [15:0] w3 = io_programCounter + 16'h1; // @[ProgramCounter.scala 20:27]
-  reg [15:0] reg_; // @[ProgramCounter.scala 25:20]
-  assign io_programCounter = reg_; // @[ProgramCounter.scala 29:21]
+  wire  w1 = ~io_run; // @[ProgramCounter.scala 21:9]
+  wire  w2 = io_stop | w1; // @[ProgramCounter.scala 22:17]
+  wire [15:0] w3 = io_programCounter + 16'h1; // @[ProgramCounter.scala 23:27]
+  reg [15:0] reg_; // @[ProgramCounter.scala 28:20]
+  assign io_programCounter = reg_; // @[ProgramCounter.scala 32:21]
 `ifdef RANDOMIZE_GARBAGE_ASSIGN
 `define RANDOMIZE
 `endif
@@ -1114,7 +1114,7 @@ module ControlUnit(
   wire  _GEN_29 = _T_8 ? 1'h0 : _GEN_25; // @[ControlUnit.scala 148:31]
   wire  _GEN_30 = _T_8 ? 1'h0 : _GEN_26; // @[ControlUnit.scala 148:31]
   wire [3:0] _GEN_33 = _T_8 ? 4'h0 : _GEN_28; // @[ControlUnit.scala 148:31]
-  wire  _T_9 = io_opcode == 5'h14; // @[ControlUnit.scala 163:19]
+  wire  _T_9 = io_opcode == 5'h19; // @[ControlUnit.scala 163:19]
   wire  _GEN_34 = _T_9 | _GEN_29; // @[ControlUnit.scala 163:31]
   wire  _GEN_35 = _T_9 | _GEN_30; // @[ControlUnit.scala 163:31]
   wire  _GEN_38 = _T_9 ? 1'h0 : _T_8; // @[ControlUnit.scala 163:31]
@@ -1185,18 +1185,18 @@ module ALU(
   output        io_boolVal
 );
   wire  _T = 4'h1 == io_op; // @[Conditional.scala 37:30]
-  wire [31:0] _T_2 = io_a + io_b; // @[ALU.scala 31:25]
+  wire [31:0] _T_2 = io_a + io_b; // @[ALU.scala 29:25]
   wire  _T_3 = 4'h3 == io_op; // @[Conditional.scala 37:30]
-  wire [63:0] _T_4 = io_a * io_b; // @[ALU.scala 34:25]
+  wire [63:0] _T_4 = io_a * io_b; // @[ALU.scala 32:25]
   wire  _T_5 = 4'h2 == io_op; // @[Conditional.scala 37:30]
-  wire [31:0] _T_7 = io_a - io_b; // @[ALU.scala 37:25]
+  wire [31:0] _T_7 = io_a - io_b; // @[ALU.scala 35:25]
   wire  _T_8 = 4'h7 == io_op; // @[Conditional.scala 37:30]
   wire  _T_9 = 4'h9 == io_op; // @[Conditional.scala 37:30]
-  wire  _T_10 = io_a == io_b; // @[ALU.scala 43:26]
+  wire  _T_10 = io_a == io_b; // @[ALU.scala 41:26]
   wire  _T_11 = 4'ha == io_op; // @[Conditional.scala 37:30]
-  wire  _T_12 = io_a > io_b; // @[ALU.scala 46:26]
+  wire  _T_12 = io_a > io_b; // @[ALU.scala 44:26]
   wire  _T_13 = 4'hb == io_op; // @[Conditional.scala 37:30]
-  wire  _T_14 = io_a < io_b; // @[ALU.scala 49:26]
+  wire  _T_14 = io_a < io_b; // @[ALU.scala 47:26]
   wire  _T_15 = 4'h8 == io_op; // @[Conditional.scala 37:30]
   wire [31:0] _GEN_0 = _T_15 ? io_a : 32'h0; // @[Conditional.scala 39:67]
   wire  _GEN_1 = _T_13 & _T_14; // @[Conditional.scala 39:67]
@@ -1212,8 +1212,8 @@ module ALU(
   wire [63:0] _GEN_11 = _T_3 ? _T_4 : {{32'd0}, _GEN_9}; // @[Conditional.scala 39:67]
   wire  _GEN_12 = _T_3 ? 1'h0 : _GEN_10; // @[Conditional.scala 39:67]
   wire [63:0] _GEN_13 = _T ? {{32'd0}, _T_2} : _GEN_11; // @[Conditional.scala 40:58]
-  assign io_result = _GEN_13[31:0]; // @[ALU.scala 14:13 ALU.scala 31:17 ALU.scala 34:17 ALU.scala 37:17 ALU.scala 40:17 ALU.scala 52:17]
-  assign io_boolVal = _T ? 1'h0 : _GEN_12; // @[ALU.scala 15:14 ALU.scala 43:18 ALU.scala 46:18 ALU.scala 49:18]
+  assign io_result = _GEN_13[31:0]; // @[ALU.scala 14:13 ALU.scala 29:17 ALU.scala 32:17 ALU.scala 35:17 ALU.scala 38:17 ALU.scala 50:17]
+  assign io_boolVal = _T ? 1'h0 : _GEN_12; // @[ALU.scala 15:14 ALU.scala 41:18 ALU.scala 44:18 ALU.scala 47:18]
 endmodule
 module CPUTop(
   input         clock,
@@ -1367,11 +1367,11 @@ module CPUTop(
   assign registerFile_reset = reset;
   assign registerFile_io_aSel = programMemory_io_instructionRead[21:17]; // @[CPUTop.scala 53:24]
   assign registerFile_io_bSel = programMemory_io_instructionRead[16:12]; // @[CPUTop.scala 54:24]
-  assign registerFile_io_writeData = controlUnit_io_mux_sel1 ? dataMemory_io_dataRead : alu_io_result; // @[CPUTop.scala 55:29]
+  assign registerFile_io_writeData = controlUnit_io_mux_sel1 ? alu_io_result : dataMemory_io_dataRead; // @[CPUTop.scala 55:29]
   assign registerFile_io_writeSel = programMemory_io_instructionRead[26:22]; // @[CPUTop.scala 52:28]
   assign registerFile_io_writeEnable = controlUnit_io_write_enable_reg; // @[CPUTop.scala 51:31]
   assign controlUnit_io_opcode = programMemory_io_instructionRead[31:27]; // @[CPUTop.scala 58:25]
   assign alu_io_op = controlUnit_io_ALU_op; // @[CPUTop.scala 63:13]
   assign alu_io_a = registerFile_io_aOut; // @[CPUTop.scala 61:12]
-  assign alu_io_b = controlUnit_io_mux_sel2 ? registerFile_io_bOut : {{16'd0}, programMemory_io_instructionRead[16:1]}; // @[CPUTop.scala 62:12]
+  assign alu_io_b = controlUnit_io_mux_sel2 ? {{16'd0}, programMemory_io_instructionRead[16:1]} : registerFile_io_bOut; // @[CPUTop.scala 62:12]
 endmodule

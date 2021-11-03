@@ -52,14 +52,14 @@ class CPUTop extends Module {
   registerFile.io.writeSel := programMemory.io.instructionRead(26, 22)
   registerFile.io.aSel := programMemory.io.instructionRead(21, 17)
   registerFile.io.bSel := programMemory.io.instructionRead(16, 12)
-  registerFile.io.writeData := Mux(controlUnit.io.mux_sel1, dataMemory.io.dataRead, alu.io.result)
+  registerFile.io.writeData := Mux(controlUnit.io.mux_sel1, alu.io.result, dataMemory.io.dataRead)
 
   //Control Unit
   controlUnit.io.opcode := programMemory.io.instructionRead(31, 27)
 
   //ALU
   alu.io.a := registerFile.io.aOut
-  alu.io.b := Mux(controlUnit.io.mux_sel2, registerFile.io.bOut, programMemory.io.instructionRead(16, 1))
+  alu.io.b := Mux(controlUnit.io.mux_sel2, programMemory.io.instructionRead(16, 1), registerFile.io.bOut)
   alu.io.op := controlUnit.io.ALU_op
 
   //Data Memory

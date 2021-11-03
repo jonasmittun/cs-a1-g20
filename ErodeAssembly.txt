@@ -1,55 +1,42 @@
-//Implementation of erosion step in assembly as defined by InstructionSet.txt
-	
-	//INIT
-	SET	 00 00	//x coord
-	SET	 01 00	//y coord
-	//START
-	//If x or y are on border jump to b
-s:	SET  08 01
-	JLTI 00 08 -b
-	JLTI 01 08 -b
-	SET  08 12
-	JGTI 00 08 -b
-	JGTI 01 08 -b
-	//If input pixel is 0 jump to b
- 	MULI 03 01 14
-	ADDI 04 03 00
-	LDD  05 04
-	SET  08 00
-	JEQI 05 08 -b
-	//If pixel has black neighbour jump to b
-	SET  08 00
-	ADDI 06 04 01
-	LDD  07 06
-	JEQI 07 08 -b
-	SUBI 06 04 01
-	LDD  07 06
-	JEQI 07 08 -b
-	ADDI 06 04 14
-	LDD  07 06
-	JEQI 07 08 -b
-	SUBI 06 04 14
-	LDD  07 06
-	JEQI 07 08 -b
-	//Else set pixel value to FF and jump to d
-	SET  02 FF
-	JMPI -d
-	//Set pixel value to 00
-b:	SET  02 00
-	//Write pixel value to output
-d:	MULI 03 01 14
-	ADDI 04 03 00
-	ADDI 04 04 190	//add 400 to current pos for output
-	STR  04 02
-	//Iterate x and y registers
-	ADDI 00 00 01
-	SET  08 14
-	JLTI 00 08 -y
-	SET  00 00
-	ADDI 01 01 01
-	//if x or y are not 20 jump to s
-y:	SET  08 13
-	JLTI 00 08 -s
-	JLTI 01 08 -s
-	//Else end program
-	END
+    SET 01 00
+    SET 02 00
+    SET 03 12
+    SET 04 00
+    SET 05 14
+l:  MUL 05 05 02
+    ADD 05 05 01
+    JEQI 01 03 -f
+    JEQI 01 04 -f
+    JEQI 02 03 -f
+    JEQI 02 04 -f
+    JMPI -e
+f:  STR 04 05
+    JMPI -s
+e:  LDD 06 05
+    ADDI 07 05 190
+    JEQI 06 04 -b
+    SUBI 08 05 01
+    LDD 08 08
+    JEQI 08 04 -b
+    ADDI 08 05 01
+    LDD 08 08
+    JEQI 08 04 -b
+    SUBI 08 05 14
+    LDD 08 08
+    JEQI 08 04 -b
+    ADDI 08 05 14
+    LDD 08 08
+    JEQI 08 04 -b
+    JMPI -w
+b:  STR 04 07
+    JMPI -s
+w:  LDD 09 FF
+    STR 04 09
+s:  JEQI 02 03 -y
+    ADDI 02 02 01
+    JMPI -l
+y:  LDD 01 00
+    JEQI 01 03 -x
+    ADDI 01 01 01
+    JMPI -l
+x:  END
