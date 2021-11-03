@@ -18,9 +18,10 @@ class ALU extends Module {
   val ADDI: UInt = 0x1.U
   val SUBI: UInt = 0x2.U
   val MULI: UInt = 0x3.U
-  val JEQI: UInt = 0xD.U
-  val JGTI: UInt = 0xE.U
-  val JLTI: UInt = 0xF.U
+  val SET:  UInt = 0x7.U
+  val JEQI: UInt = 0x9.U
+  val JGTI: UInt = 0xA.U
+  val JLTI: UInt = 0xB.U
 
 
 
@@ -34,6 +35,9 @@ class ALU extends Module {
     is(SUBI){
       io.result := io.a - io.b
     }
+    is(SET){
+      io.result := io.b
+    }
     is(JEQI){
       io.boolVal := io.a === io.b
     }
@@ -43,7 +47,6 @@ class ALU extends Module {
     is(JLTI){
       io.boolVal := io.a < io.b
     }
-
   }
 
 

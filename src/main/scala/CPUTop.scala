@@ -58,7 +58,7 @@ class CPUTop extends Module {
   val writeDataSel = Wire(Bool())
   val result = Wire(UInt(32.W))
   val boolResult = Wire(Bool())
-  val bMux = Wire(Bool())
+  val intMuxOut = Wire(UInt(32.W))
   val dataRead = Wire(UInt(32.W))
   val dataWrite = Wire(UInt(32.W))
   val dataAddress = Wire(UInt(16.W))
@@ -100,7 +100,7 @@ class CPUTop extends Module {
 
   //ALU
   alu.io.a := a
-  alu.io.b := bMux
+  alu.io.b := intMuxOut
   alu.io.op := aluOp
   result := alu.io.result
   boolResult := alu.io.boolVal
@@ -112,8 +112,8 @@ class CPUTop extends Module {
   dataRead := dataMemory.io.dataRead
 
   //Intermediate mux
-  val intMux = Mux(intSel, b, intermediate)
-  bMux := intMux
+  val intMux = Mux(intSel, b, Cat(0.U(16.W),intermediate))
+  intMuxOut := intMux
 
   //Data mux
   val datMux = Mux(writeDataSel, dataRead, result)
@@ -126,7 +126,7 @@ class CPUTop extends Module {
   jump := jumpAndOr | uJump
 
   //Wire splits
-  counterJump := instruction(31, 16)
+  counterJump := instruction(16, 1)
   opcode := instruction(31, 27)
   writeSel := instruction(26, 22)
   aSel := instruction(21, 17)
