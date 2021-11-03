@@ -1287,7 +1287,7 @@ module CPUTop(
   wire [31:0] alu_io_result; // @[CPUTop.scala 28:19]
   wire  alu_io_boolVal; // @[CPUTop.scala 28:19]
   wire [31:0] instruction = programMemory_io_instructionRead; // @[CPUTop.scala 43:25 CPUTop.scala 79:15]
-  wire [15:0] intermediate = instruction[16:1]; // @[CPUTop.scala 134:30]
+  wire [15:0] intermediate = instruction[16:1]; // @[CPUTop.scala 140:30]
   wire [31:0] _T = {16'h0,intermediate}; // @[Cat.scala 29:58]
   wire  intSel = controlUnit_io_mux_sel2; // @[CPUTop.scala 57:20 CPUTop.scala 97:10]
   wire [31:0] b = registerFile_io_bOut; // @[CPUTop.scala 52:15 CPUTop.scala 88:5]
@@ -1296,8 +1296,9 @@ module CPUTop(
   wire [31:0] result = alu_io_result; // @[CPUTop.scala 59:20 CPUTop.scala 105:10]
   wire  boolResult = alu_io_boolVal; // @[CPUTop.scala 60:24 CPUTop.scala 106:14]
   wire  cJump = controlUnit_io_c_jump; // @[CPUTop.scala 54:19 CPUTop.scala 94:9]
-  wire  jumpAndOr = boolResult & cJump; // @[CPUTop.scala 123:27]
+  wire  jumpAndOr = boolResult & cJump; // @[CPUTop.scala 129:27]
   wire  uJump = controlUnit_io_u_jump; // @[CPUTop.scala 53:19 CPUTop.scala 93:9]
+  wire [31:0] a = registerFile_io_aOut; // @[CPUTop.scala 51:15 CPUTop.scala 87:5]
   ProgramCounter programCounter ( // @[CPUTop.scala 23:30]
     .clock(programCounter_clock),
     .reset(programCounter_reset),
@@ -1359,8 +1360,8 @@ module CPUTop(
     .io_boolVal(alu_io_boolVal)
   );
   assign io_done = controlUnit_io_stop; // @[CPUTop.scala 68:11]
-  assign io_testerDataMemDataRead = dataMemory_io_testerDataRead; // @[CPUTop.scala 146:28]
-  assign io_testerProgMemDataRead = programMemory_io_testerDataRead; // @[CPUTop.scala 140:28]
+  assign io_testerDataMemDataRead = dataMemory_io_testerDataRead; // @[CPUTop.scala 152:28]
+  assign io_testerProgMemDataRead = programMemory_io_testerDataRead; // @[CPUTop.scala 146:28]
   assign programCounter_clock = clock;
   assign programCounter_reset = reset;
   assign programCounter_io_stop = controlUnit_io_stop; // @[CPUTop.scala 72:26]
@@ -1368,19 +1369,19 @@ module CPUTop(
   assign programCounter_io_run = io_run; // @[CPUTop.scala 71:25]
   assign programCounter_io_programCounterJump = instruction[16:1]; // @[CPUTop.scala 74:40]
   assign dataMemory_clock = clock;
-  assign dataMemory_io_address = b[31:16]; // @[CPUTop.scala 111:25]
+  assign dataMemory_io_address = a[15:0]; // @[CPUTop.scala 111:25]
   assign dataMemory_io_writeEnable = controlUnit_io_write_enable_dm; // @[CPUTop.scala 109:29]
   assign dataMemory_io_dataWrite = registerFile_io_bOut; // @[CPUTop.scala 110:27]
-  assign dataMemory_io_testerEnable = io_testerDataMemEnable; // @[CPUTop.scala 148:30]
-  assign dataMemory_io_testerAddress = io_testerDataMemAddress; // @[CPUTop.scala 145:31]
-  assign dataMemory_io_testerWriteEnable = io_testerDataMemWriteEnable; // @[CPUTop.scala 149:35]
-  assign dataMemory_io_testerDataWrite = io_testerDataMemDataWrite; // @[CPUTop.scala 147:33]
+  assign dataMemory_io_testerEnable = io_testerDataMemEnable; // @[CPUTop.scala 154:30]
+  assign dataMemory_io_testerAddress = io_testerDataMemAddress; // @[CPUTop.scala 151:31]
+  assign dataMemory_io_testerWriteEnable = io_testerDataMemWriteEnable; // @[CPUTop.scala 155:35]
+  assign dataMemory_io_testerDataWrite = io_testerDataMemDataWrite; // @[CPUTop.scala 153:33]
   assign programMemory_clock = clock;
   assign programMemory_io_address = programCounter_io_programCounter; // @[CPUTop.scala 78:28]
-  assign programMemory_io_testerEnable = io_testerProgMemEnable; // @[CPUTop.scala 142:33]
-  assign programMemory_io_testerAddress = io_testerProgMemAddress; // @[CPUTop.scala 139:34]
-  assign programMemory_io_testerWriteEnable = io_testerProgMemWriteEnable; // @[CPUTop.scala 143:38]
-  assign programMemory_io_testerDataWrite = io_testerProgMemDataWrite; // @[CPUTop.scala 141:36]
+  assign programMemory_io_testerEnable = io_testerProgMemEnable; // @[CPUTop.scala 148:33]
+  assign programMemory_io_testerAddress = io_testerProgMemAddress; // @[CPUTop.scala 145:34]
+  assign programMemory_io_testerWriteEnable = io_testerProgMemWriteEnable; // @[CPUTop.scala 149:38]
+  assign programMemory_io_testerDataWrite = io_testerProgMemDataWrite; // @[CPUTop.scala 147:36]
   assign registerFile_clock = clock;
   assign registerFile_reset = reset;
   assign registerFile_io_aSel = instruction[21:17]; // @[CPUTop.scala 84:24]

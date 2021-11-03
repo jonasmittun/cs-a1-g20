@@ -112,12 +112,18 @@ class CPUTop extends Module {
   dataRead := dataMemory.io.dataRead
 
   //Intermediate mux
-  val intMux = Mux(intSel, b, Cat(0.U(16.W),intermediate))
-  intMuxOut := intMux
+  when (intSel){
+    intMuxOut := b
+  } .otherwise {
+    intMuxOut := Cat(0.U(16.W),intermediate)
+  }
 
   //Data mux
-  val datMux = Mux(writeDataSel, dataRead, result)
-  writeData := datMux
+  when (writeDataSel){
+    writeData := dataRead
+  } .otherwise {
+    writeData := result
+  }
 
   //AND
   jumpAndOr := boolResult & cJump
@@ -133,7 +139,7 @@ class CPUTop extends Module {
   bSel := instruction(16, 12)
   intermediate := instruction(16, 1)
   dataWrite := b
-  dataAddress := b(31, 16)
+  dataAddress := a(15, 0)
 
   //This signals are used by the tester for loading the program to the program memory, do not touch
   programMemory.io.testerAddress := io.testerProgMemAddress
