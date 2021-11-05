@@ -10,7 +10,8 @@ l:  SET 05 14
     JEQI 02 03 -f
     JEQI 02 04 -f
     JMPI -e
-f:  STR 05 04
+f:  ADDI 07 05 190
+    STR 07 04
     JMPI -s
 e:  LDD 06 05
     ADDI 07 05 190
