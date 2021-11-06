@@ -1,3 +1,9 @@
+/*
+ *
+ * Written by s204442
+ *
+ */
+
 import chisel3._
 
 class ProgramCounter extends Module {
@@ -10,9 +16,6 @@ class ProgramCounter extends Module {
   })
 
   //Implement this module here (respect the provided interface, since it used by the tester)
-
-
-
 
   val w1 = Wire(Bool())
   val w2 = Wire(Bool())
