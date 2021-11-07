@@ -12,278 +12,122 @@ class ControlUnit extends Module {
   val io = IO(new Bundle {
     val opcode = Input(UInt(5.W))
 
-    val ALU_op = Output(UInt(4.W))
+    val ALU_op = Output(UInt(5.W))
+    val data_mux_sel = Output(Bool())
+    val int_mux_sel = Output(Bool())
     val c_jump = Output(Bool())
-    val mux_sel1 = Output(Bool())
-    val mux_sel2 = Output(Bool())
-    val stop = Output(Bool())
     val u_jump = Output(Bool())
     val write_enable_dm = Output(Bool())
     val write_enable_reg = Output(Bool())
+    val stop = Output(Bool())
   })
 
-  //0x00 reserved for NOP
-  io.ALU_op := 0.U
-  io.c_jump := false.B
-  io.mux_sel1 := false.B
-  io.mux_sel2 := false.B
-  io.stop := false.B
+  //Define instructions as opcode values
+  val ADD:  UInt = 0x01.U
+  val ADDI: UInt = 0x02.U
+  val SUB:  UInt = 0x03.U
+  val SUBI: UInt = 0x04.U
+  val MUL:  UInt = 0x05.U
+  val MULI: UInt = 0x06.U
+  val SET:  UInt = 0x11.U
+  val LDD:  UInt = 0x12.U
+  val STR:  UInt = 0x13.U
+  val JMPI: UInt = 0x19.U
+  val JEQ:  UInt = 0x15.U
+  val JGT:  UInt = 0x16.U
+  val JLT:  UInt = 0x17.U
+  val JEQI: UInt = 0x1A.U
+  val JGTI: UInt = 0x1B.U
+  val JLTI: UInt = 0x1C.U
+  val END:  UInt = 0x1F.U
+
+  // Instantiate outputs                    Default
+  io.ALU_op := 0.U                          // ALU operation 00000
+  io.data_mux_sel := true.B                 // Use ALU result
+  io.int_mux_sel := false.B                 // Don't immediate value
+  io.c_jump := false.B                      // Don't jump
   io.u_jump := false.B
-  io.write_enable_dm := false.B
-  io.write_enable_reg := false.B
-
-  when (io.opcode === 0x01.U) {       //ADD
-    io.mux_sel1 := true.B                //Use ALU output
-    io.mux_sel2 := false.B                //Use register values
-
-    io.stop := false.B                   //Don't stop
-
-    io.c_jump := false.B                  //Don't jump
-    io.u_jump := false.B
-
-    io.write_enable_dm := false.B         //Don't write to data memory
-    io.write_enable_reg := true.B        //Write to register
-
-    io.ALU_op := 0x1.U                //ALU operation 0001
-  }
-
-  when (io.opcode === 0x02.U) {       //ADDI
-    io.mux_sel1 := true.B                //Use ALU output
-    io.mux_sel2 := true.B                //Use immediate value
-
-    io.stop := false.B                   //Don't stop
-
-    io.c_jump := false.B                  //Don't jump
-    io.u_jump := false.B
-
-    io.write_enable_dm := false.B         //Don't write to data memory
-    io.write_enable_reg := true.B        //Write to register
-
-    io.ALU_op := 0x1.U                //ALU operation 0001
-  }
-
-  when (io.opcode === 0x03.U) {       //SUB
-    io.mux_sel1 := true.B                //Use ALU output
-    io.mux_sel2 := false.B               //Use register values
-
-    io.stop := false.B                    //Don't stop
-
-    io.c_jump := false.B                  //Don't jump
-    io.u_jump := false.B
-
-    io.write_enable_dm := false.B         //Don't write to data memory
-    io.write_enable_reg := true.B        //Write to register
-
-    io.ALU_op := 0x2.U                //ALU operation 0010
-  }
-
-  when (io.opcode === 0x04.U) {       //SUBI
-    io.mux_sel1 := true.B               //Use ALU output
-    io.mux_sel2 := true.B                //Use immediate value
-
-    io.stop := false.B                   //Don't stop
-
-    io.c_jump := false.B                  //Don't jump
-    io.u_jump := false.B
-
-    io.write_enable_dm := false.B         //Don't write to data memory
-    io.write_enable_reg := true.B        //Write to register
-
-    io.ALU_op := 0x2.U                //ALU operation 0010
-  }
-
-  when (io.opcode === 0x05.U) {       //MUL
-    io.mux_sel1 := true.B                //Use ALU output
-    io.mux_sel2 := false.B                //Use register values
-
-    io.stop := false.B                    //Don't stop
-
-    io.c_jump := false.B                 //Don't jump
-    io.u_jump := false.B
-
-    io.write_enable_dm := false.B        //Don't write to data memory
-    io.write_enable_reg := 1.U        //Write to register
-
-    io.ALU_op := 0x3.U                //ALU operation 0011
-  }
-
-  when (io.opcode === 0x06.U) {       //MULI
-    io.mux_sel1 := true.B                //Use ALU output
-    io.mux_sel2 := true.B                //Use immediate value
-
-    io.stop := false.B                    //Don't stop
-
-    io.c_jump := false.B                  //Don't jump
-    io.u_jump := false.B
-
-    io.write_enable_dm := false.B         //Don't write to data memory
-    io.write_enable_reg := true.B        //Write to register
-
-    io.ALU_op := 0x3.U                //ALU operation 0011
-  }
-
-  when (io.opcode === 0x11.U) {       //SET
-    io.mux_sel1 := true.B                //Use ALU output
-    io.mux_sel2 := true.B                //Use immediate value
-
-    io.stop := false.B                   //Don't stop
-
-    io.c_jump := false.B                  //Don't jump
-    io.u_jump := false.B
-
-    io.write_enable_dm := false.B         //Don't write to data memory
-    io.write_enable_reg := true.B        //Write to register
-
-    io.ALU_op := 0x7.U                //ALU operation 0111
-  }
-
-  when (io.opcode === 0x12.U) {       //LDD
-    io.mux_sel1 := false.B               //Use ALU output
-    io.mux_sel2 := false.B                //Use register values
-
-    io.stop := false.B                    //Don't stop
-
-    io.c_jump := false.B                  //Don't jump
-    io.u_jump := false.B
-
-    io.write_enable_dm := false.B         //Don't write to data memory
-    io.write_enable_reg := true.B       //Write to register
-
-    io.ALU_op := 0.U                //ALU operation 1000
-  }
-
-  when (io.opcode === 0x13.U) {       //STR
-    io.mux_sel1 := false.B                //Use ALU output
-    io.mux_sel2 := false.B                //Use register values
-
-    io.stop := false.B                    //Don't stop
-
-    io.c_jump := false.B                  //Don't jump
-    io.u_jump := false.B
-
-    io.write_enable_dm := 1.U         //Write to data memory
-    io.write_enable_reg := false.B        //Don't write to register
-
-    io.ALU_op := 0.U                 //ALU operation 0000
-  }
-
-  when (io.opcode === 0x19.U) {       //JMPI
-    io.mux_sel1 := true.B               //Use ALU output
-    io.mux_sel2 := true.B                //Use immediate value
-
-    io.stop := false.B                    //Don't stop
-
-    io.c_jump := false.B                  //Unconditional jump
-    io.u_jump := true.B
-
-    io.write_enable_dm := false.B         //Don't write to data memory
-    io.write_enable_reg := false.B        //Don't write to register
-
-    io.ALU_op := 0.U                  //ALU operation 0000
-  }
-
-  when (io.opcode === 0x15.U) {       //JEQ
-    io.mux_sel1 := true.B                //Use ALU output
-    io.mux_sel2 := false.B                //Use register values
-
-    io.stop := false.B                    //Don't stop
-
-    io.c_jump := true.B                 //Conditional jump
-    io.u_jump := false.B
-
-    io.write_enable_dm := false.B         //Don't write to data memory
-    io.write_enable_reg := false.B        //Don't write to register
-
-    io.ALU_op := 0x9.U                //ALU operation 1001
-  }
-
-  when (io.opcode === 0x16.U) {       //JGT
-    io.mux_sel1 := true.B                //Use ALU output
-    io.mux_sel2 := false.B                //Use register values
-
-    io.stop := false.B                    //Don't stop
-
-    io.c_jump := true.B                 //Conditional jump
-    io.u_jump := false.B
-
-    io.write_enable_dm := false.B         //Don't write to data memory
-    io.write_enable_reg := false.B        //Don't write to register
-
-    io.ALU_op := 0xA.U                //ALU operation 1010
-  }
-
-  when (io.opcode === 0x17.U) {       //JLT
-    io.mux_sel1 := true.B                //Use ALU output
-    io.mux_sel2 := false.B                //Use register values
-
-    io.stop := false.B                    //Don't stop
-
-    io.c_jump := true.B                  //Conditional jump
-    io.u_jump := false.B
-
-    io.write_enable_dm := false.B         //Don't write to data memory
-    io.write_enable_reg := false.B        //Don't write to register
-
-    io.ALU_op := 0xB.U                //ALU operation 1100
-  }
-
-  when (io.opcode === 0x1A.U) {       //JEQI
-    io.mux_sel1 := true.B                //Use ALU output
-    io.mux_sel2 := false.B                //Use register values
-
-    io.stop := false.B                    //Don't stop
-
-    io.c_jump := true.B                 //Conditional jump
-    io.u_jump := false.B
-
-    io.write_enable_dm := false.B        //Don't write to data memory
-    io.write_enable_reg := false.B        //Don't write to register
-
-    io.ALU_op := 0x9.U                //ALU operation 1101
-  }
-
-  when (io.opcode === 0x1B.U) {       //JGTI
-    io.mux_sel1 := true.B                //Use ALU output
-    io.mux_sel2 := true.B                //Use immediate value
-
-    io.stop := false.B                    //Don't stop
-
-    io.c_jump := true.B                 //Conditional jump
-    io.u_jump := false.B
-
-    io.write_enable_dm := false.B         //Don't write to data memory
-    io.write_enable_reg := false.B        //Don't write to register
-
-    io.ALU_op := 0xA.U                //ALU operation 1110
-  }
-
-  when (io.opcode === 0x1C.U) {       //JLTI
-    io.mux_sel1 := true.B                //Use ALU output
-    io.mux_sel2 := true.B                //Use immediate value
-
-    io.stop := false.B                    //Don't stop
-
-    io.c_jump := true.B                 //Conditional jump
-    io.u_jump := false.B
-
-    io.write_enable_dm := false.B         //Don't write to data memory
-    io.write_enable_reg := false.B        //Don't write to register
-
-    io.ALU_op := 0xB.U                //ALU operation 1111
-  }
-
-  when (io.opcode === 0x1F.U) {       //END
-    io.mux_sel1 := true.B                //Use ALU output
-    io.mux_sel2 := false.B                //Use register values
-
-    io.stop := true.B                   //Stop
-
-    io.c_jump := false.B                  //Don't jump
-    io.u_jump := false.B
-
-    io.write_enable_dm := false.B         //Don't write to data memory
-    io.write_enable_reg := false.B        //Don't write to register
-
-    io.ALU_op := 0.U                  //ALU operation 0000
+  io.write_enable_dm := false.B             // Don't write to data memory
+  io.write_enable_reg := true.B             // Write to register
+  io.stop := false.B                        // Don't stop
+
+  switch(io.opcode){
+    is(ADD){
+      io.ALU_op := ADDI                       //ALU operation 00010
+    }
+    is(ADDI){
+      io.int_mux_sel := true.B                //Use immediate value
+      io.ALU_op := ADDI                       //ALU operation 00010
+    }
+    is(SUB){
+      io.ALU_op := SUBI                       //ALU operation 00100
+    }
+    is(SUBI){
+      io.int_mux_sel := true.B                //Use immediate value
+      io.ALU_op := SUBI                       //ALU operation 00100
+    }
+    is(MUL){
+      io.ALU_op := MULI                       //ALU operation 00110
+    }
+    is(MULI){
+      io.int_mux_sel := true.B                //Use immediate value
+      io.ALU_op := MULI                       //ALU operation 00110
+    }
+    is(SET){
+      io.int_mux_sel := true.B                //Use immediate value
+      io.ALU_op := SET                        //ALU operation 10001
+    }
+    is(LDD){
+      io.data_mux_sel := false.B              //Don't use ALU output
+      io.ALU_op := LDD                        //ALU operation 10010
+    }
+    is(STR){
+      io.data_mux_sel := false.B              //Don't use ALU output
+      io.write_enable_dm := true.B            //Write to data memory
+      io.write_enable_reg := false.B          //Don't write to register
+      io.ALU_op := 0.U                        //ALU operation 00000
+    }
+    is(JMPI){
+      io.int_mux_sel := true.B                //Use immediate value
+      io.u_jump := true.B                     //Unconditional Jump
+      io.write_enable_reg := false.B          //Don't write to register
+      io.ALU_op := 0.U                        //ALU operation 00000
+    }
+    is(JEQ){
+      io.c_jump := true.B                     //Conditional jump
+      io.write_enable_reg := false.B          //Don't write to register
+      io.ALU_op := JEQI                       //ALU operation 11010
+    }
+    is(JGT){
+      io.c_jump := true.B                     //Conditional jump
+      io.write_enable_reg := false.B          //Don't write to register
+      io.ALU_op := JGTI                       //ALU operation 11011
+    }
+    is(JLT){
+      io.c_jump := true.B                     //Conditional jump
+      io.write_enable_reg := false.B          //Don't write to register
+      io.ALU_op := JLTI                       //ALU operation 11100
+    }
+    is(JEQI){
+      io.c_jump := true.B                     //Conditional jump
+      io.write_enable_reg := false.B          //Don't write to register
+      io.ALU_op := JEQI                       //ALU operation 11010
+    }
+    is(JGTI){
+      io.c_jump := true.B                     //Conditional jump
+      io.write_enable_reg := false.B          //Don't write to register
+      io.ALU_op := JGTI                       //ALU operation 11011
+    }
+    is(JLTI){
+      io.c_jump := true.B                     //Conditional jump
+      io.write_enable_reg := false.B          //Don't write to register
+      io.ALU_op := JLTI                       //ALU operation 11100
+    }
+    is(END){
+      io.data_mux_sel := false.B              //Don't use ALU output
+      io.stop := true.B                       //Stop
+      io.write_enable_reg := false.B          //Don't write to register
+      io.ALU_op := 0.U                        //ALU operation 00000
+    }
   }
 }
