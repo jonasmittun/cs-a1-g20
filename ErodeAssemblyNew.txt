@@ -1,4 +1,5 @@
 //Implementation of erosion step in assembly as defined by InstructionSet.txt
+//Version written by s204442 - this code doesn't work due to an unresolved JLTI bug
 
 	//INIT
 	SET	 00 00	//x coord
